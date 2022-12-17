@@ -1,0 +1,24 @@
+version = 0.1
+[default]
+[default.pipeline_bootstrap]
+[default.pipeline_bootstrap.parameters]
+pipeline_user = "arn:aws:iam::756678551734:user/aws-sam-cli-managed-resourceQuerier-d-PipelineUser-1SCBTUF8OZUV0"
+permissions_provider = "AWS IAM"
+
+[nlp-app-dev]
+[nlp-app-dev.pipeline_bootstrap]
+[nlp-app-dev.pipeline_bootstrap.parameters]
+pipeline_execution_role = "arn:aws:iam::756678551734:role/aws-sam-cli-managed-resource-PipelineExecutionRole-162EACZQPHABK"
+cloudformation_execution_role = "arn:aws:iam::756678551734:role/aws-sam-cli-managed-resou-CloudFormationExecutionR-8A2X01UY1A9V"
+artifacts_bucket = "aws-sam-cli-managed-nlp-app-dev-p-artifactsbucket-1mghwnpwsevay"
+image_repository = ""
+region = "us-east-1"
+
+[nlp-app-prod]
+[nlp-app-prod.pipeline_bootstrap]
+[nlp-app-prod.pipeline_bootstrap.parameters]
+pipeline_execution_role = "arn:aws:iam::756678551734:role/aws-sam-cli-managed-resource-PipelineExecutionRole-162EACZQPHABK"
+cloudformation_execution_role = "arn:aws:iam::756678551734:role/aws-sam-cli-managed-resou-CloudFormationExecutionR-8A2X01UY1A9V"
+artifacts_bucket = "aws-sam-cli-managed-nlp-app-prod-artifactsbucket-lunxol5949r0"
+image_repository = ""
+region = "us-east-1"

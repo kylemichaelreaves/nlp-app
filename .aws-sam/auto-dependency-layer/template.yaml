@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'nlp-app
+
+  Sample SAM Template for nlp-app
+
+  '
+Globals:
+  Function:
+    Timeout: 3
+    MemorySize: 128
+    Tracing: Active
+    Environment:
+      Variables:
+        NLTK_DATA: /tmp/nltk_data
+Resources:
+  NLPFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: NLPFunction
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+      - x86_64
+      Layers:
+      - Fn::GetAtt:
+        - AwsSamAutoDependencyLayerNestedStack
+        - Outputs.NLPFunction2ef82f99DepLayer
+    Metadata:
+      SamResourceId: NLPFunction
+  AwsSamAutoDependencyLayerNestedStack:
+    DeletionPolicy: Delete
+    Metadata:
+      CreatedBy: AWS SAM CLI sync command
+    Properties:
+      TemplateURL: /Users/kylereaves/src/nlp-app/.aws-sam/auto-dependency-layer/adl_nested_template.yaml
+    Type: AWS::CloudFormation::Stack
+Outputs:
+  NLPFunction:
+    Description: nlp-app Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - NLPFunction
+      - Arn
