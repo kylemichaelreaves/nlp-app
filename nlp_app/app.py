@@ -8,11 +8,14 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
-def get_synonyms(word):
+def get_synonyms(text):
+    text = text.replace(" ", "_")
+    terms = text.split(",")
     synonyms = []
-    for syn in wn.synsets(word):
-        for lemma in syn.lemmas():
-            synonyms.append(lemma.name())
+    for term in terms:
+        synonym_list = wn.synsets(term)
+    for synonym in synonym_list:
+        synonyms.append(synonym.lemmas()[0].name())
     return synonyms
 
 
