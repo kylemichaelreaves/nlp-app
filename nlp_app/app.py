@@ -1,11 +1,14 @@
 import json
 import os
 import time
+import nltk
 from nltk.corpus import wordnet as wn
 import logging
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
+
+nltk.download('wordnet', download_dir='/tmp/nltk')
 
 
 def get_synonyms(text):
@@ -32,33 +35,21 @@ def lambda_handler(event, context):
     logger.info(event)
 
     keywords = event['queryStringParameters']['keywords']
-
-    # We have added a 1 second delay so you can see the time remaining in get_remaining_time_in_millis.
-    time.sleep(1)
-    print("Lambda time remaining in MS:", context.get_remaining_time_in_millis())
+    if not keywords:
+        return {
+            'statusCode': 400,
+            'body': json.dumps('No keywords provided!')
+        }
 
     response = {
         "statusCode": 200,
+        "headers": {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+        },
         "body": json.dumps({
             "related_keywords": get_synonyms(keywords)
         }),
     }
 
     return response
-
-# Sample pure Lambda function Parameters ---------- event: dict, required API Gateway Lambda Proxy Input Format Event
-# doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway
-# -simple-proxy-for-lambda-input-format context: object, required Lambda Context runtime methods and attributes
-# Context doc: https://docs.aws.amazon.com/lambda/latest/dg/python-context-object.html Returns ------ API Gateway
-# Lambda Proxy Output Format: dict
-#
-#     Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
-
-
-# try:
-#     ip = requests.get("http://checkip.amazonaws.com/")
-# except requests.RequestException as e:
-#     # Send some context about this error to Lambda Logs
-#     print(e)
-
-#     raise e
