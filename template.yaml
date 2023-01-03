@@ -13,7 +13,7 @@ Globals:
     Tracing: Active
     Environment:
       Variables:
-        NLTK_DATA: /tmp/nltk_data
+        NLTK_DATA: tmp/nltk_data
 
 
 Resources:
