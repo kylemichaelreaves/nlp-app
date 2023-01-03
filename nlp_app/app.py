@@ -8,8 +8,6 @@ import logging
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-nltk.download('wordnet', download_dir='/tmp/nltk')
-
 
 def get_synonyms(text):
     text = text.replace(" ", "_")
