@@ -1,12 +1,15 @@
 import json
+import logging
 import os
-import time
+
 import nltk
 from nltk.corpus import wordnet as wn
-import logging
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
+
+nltk.data.path.append('/tmp/nltk_data')
+nltk.download('wordnet', download_dir='/tmp/nltk_data')
 
 
 def get_synonyms(text):
