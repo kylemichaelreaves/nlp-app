@@ -1,7 +1,6 @@
 import json
 import logging
 import os
-
 import nltk
 from nltk.corpus import wordnet as wn
 
@@ -38,15 +37,17 @@ def lambda_handler(event, context):
     logger.info(event)
 
     keywords = event['queryStringParameters']['keywords']
+
+    synonyms = get_synonyms(keywords)
+    logger.info('## SYNONYMS')
+    logger.info(synonyms)
+
     if not keywords:
         return {
             'statusCode': 400,
             'body': json.dumps('No keywords provided!')
         }
     if keywords:
-        synonyms = get_synonyms(keywords)
-        logger.info('## SYNONYMS')
-        logger.info(synonyms)
         return {
             'statusCode': 200,
             "headers": {
