@@ -9,6 +9,3 @@ Resources:
       Runtime: python3.9
       Architectures:
         - x86_64
-      Environment:
-        Variables:
-          DOCKER_HOST: unix:///var/run/docker.sock

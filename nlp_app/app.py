@@ -18,8 +18,10 @@ def get_synonyms(text):
     synonyms = []
     for term in terms:
         synonym_list = wn.synsets(term)
-    for synonym in synonym_list:
-        synonyms.append(synonym.lemmas()[0].name())
+        for synonym in synonym_list:
+            name = synonym.lemmas()[0].name()
+            if name not in synonyms:
+                synonyms.append(name)
     return synonyms
 
 
@@ -43,6 +45,8 @@ def lambda_handler(event, context):
         }
     if keywords:
         synonyms = get_synonyms(keywords)
+        logger.info('## SYNONYMS')
+        logger.info(synonyms)
         return {
             'statusCode': 200,
             "headers": {
