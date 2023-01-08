@@ -41,16 +41,13 @@ def lambda_handler(event, context):
             'statusCode': 400,
             'body': json.dumps('No keywords provided!')
         }
-
-    response = {
-        "statusCode": 200,
-        "headers": {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-        },
-        "body": json.dumps({
-            "related_keywords": get_synonyms(keywords)
-        }),
-    }
-
-    return response
+    if keywords:
+        synonyms = get_synonyms(keywords)
+        return {
+            'statusCode': 200,
+            "headers": {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+            },
+            'body': json.dumps({'synonyms': synonyms})
+        }
