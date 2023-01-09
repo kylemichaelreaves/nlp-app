@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: AWS SAM CLI Nested Stack for Auto Dependency Layer Creation
 Metadata:
-  SamCliInfo: 1.66.0
+  SamCliInfo: 1.68.0
   key: AWS SAM CLI sync command
 Outputs:
   NLPFunction2ef82f99DepLayer:
@@ -16,7 +16,7 @@ Resources:
       - python3.9
       ContentUri: /Users/kylereaves/src/nlp-app/.aws-sam/auto-dependency-layer/NLPFunction2ef82f99DepLayer
       Description: Auto created layer for dependencies of function NLPFunction
-      LayerName: nlp-app834d5234-NLPFunction2ef82f99-DepLayer
+      LayerName: nlp-app-dev-stac525e7fe5-NLPFunction2ef82f99-DepLayer
       RetentionPolicy: Delete
     Type: AWS::Serverless::LayerVersion
 Transform: AWS::Serverless-2016-10-31
