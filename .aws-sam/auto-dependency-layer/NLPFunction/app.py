@@ -1,19 +1,27 @@
 import json
-import os
-import time
-from nltk.corpus import wordnet as wn
 import logging
+import os
+import nltk
+from nltk.corpus import wordnet as wn
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
+nltk.data.path.append('/tmp/nltk_data')
+nltk.download('wordnet', download_dir='/tmp/nltk_data')
 
-def get_synonyms(word):
+
+def get_synonyms(text):
+    text = text.replace(" ", "_")
+    terms = text.split(",")
     synonyms = []
-    for syn in wn.synsets(word):
-        for lemma in syn.lemmas():
-            synonyms.append(lemma.name())
-        return synonyms
+    for term in terms:
+        synonym_list = wn.synsets(term)
+        for synonym in synonym_list:
+            name = synonym.lemmas()[0].name()
+            if name not in synonyms:
+                synonyms.append(name)
+    return synonyms
 
 
 def lambda_handler(event, context):
@@ -28,30 +36,23 @@ def lambda_handler(event, context):
     logger.info('## EVENT')
     logger.info(event)
 
-    # We have added a 1 second delay so you can see the time remaining in get_remaining_time_in_millis.
-    time.sleep(1)
-    print("Lambda time remaining in MS:", context.get_remaining_time_in_millis())
+    keywords = event['queryStringParameters']['keywords']
 
-    return {
-        "statusCode": 200,
-        "body": json.dumps({
-            "related_keywords": wn.synset(event)
-        }),
-    }
+    synonyms = get_synonyms(keywords)
+    logger.info('## SYNONYMS')
+    logger.info(synonyms)
 
-# Sample pure Lambda function Parameters ---------- event: dict, required API Gateway Lambda Proxy Input Format Event
-# doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway
-# -simple-proxy-for-lambda-input-format context: object, required Lambda Context runtime methods and attributes
-# Context doc: https://docs.aws.amazon.com/lambda/latest/dg/python-context-object.html Returns ------ API Gateway
-# Lambda Proxy Output Format: dict
-#
-#     Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
-
-
-# try:
-#     ip = requests.get("http://checkip.amazonaws.com/")
-# except requests.RequestException as e:
-#     # Send some context about this error to Lambda Logs
-#     print(e)
-
-#     raise e
+    if not keywords:
+        return {
+            'statusCode': 400,
+            'body': json.dumps('No keywords provided!')
+        }
+    if keywords:
+        return {
+            'statusCode': 200,
+            "headers": {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+            },
+            'body': json.dumps({'synonyms': synonyms})
+        }
